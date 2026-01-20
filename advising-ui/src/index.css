@@ -315,3 +315,174 @@ body {
 .student-card:hover .card-arrow {
     color: var(--primary-blue);
 }
+
+/* Advising Notes View */
+.back-button {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.95rem;
+    padding: 0;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.back-button:hover {
+    color: var(--primary-blue);
+}
+
+.small-margin {
+    margin-bottom: 20px;
+}
+
+.student-info-banner {
+    background-color: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    box-shadow: var(--shadow-sm);
+    background: linear-gradient(to right, #ffffff, #f8fbff);
+}
+
+.banner-name {
+    margin: 0 0 5px;
+    font-size: 1.5rem;
+    color: var(--primary-dark);
+}
+
+.banner-sub {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+}
+
+.history-section h3 {
+    margin: 0 0 15px;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.advising-card {
+    background-color: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+}
+
+.advising-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-blue);
+    transform: translateY(-2px);
+}
+
+.advising-card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.advising-main {
+    flex: 1;
+}
+
+.advising-title {
+    margin: 0 0 5px;
+    font-size: 1.05rem;
+}
+
+.advising-meta {
+    margin-bottom: 12px;
+}
+
+.advising-date {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.advising-tags {
+    display: flex;
+    gap: 10px;
+}
+
+/* Tags */
+.tag {
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tag-blue {
+    background-color: #e6f0ff;
+    color: #0056b3;
+}
+
+.tag-purple {
+    background-color: #f3e6ff;
+    color: #6600cc;
+}
+
+.tag-orange {
+    background-color: #fff0e6;
+    color: #cc5200;
+}
+
+.tag-teal {
+    background-color: #e6fffa;
+    color: #00997a;
+}
+
+.tag-gray {
+    background-color: #f0f0f0;
+    color: #666666;
+}
+
+.tag-success {
+    background-color: #e6ffed;
+    color: #00802b;
+    border: 1px solid #b3ffcc;
+}
+
+.tag-warning {
+    background-color: #fffde6;
+    color: #997a00;
+    border: 1px solid #fff5b3;
+}

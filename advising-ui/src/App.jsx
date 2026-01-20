@@ -16,7 +16,9 @@ import {
     BookOpen,
     BarChart2,
     Calendar,
-    FileText
+    FileText,
+    ArrowLeft,
+    Plus
 } from 'lucide-react';
 
 const SidebarItem = ({ icon: Icon, label, active = false }) => (
@@ -26,8 +28,8 @@ const SidebarItem = ({ icon: Icon, label, active = false }) => (
     </div>
 );
 
-const StudentCard = ({ name, matric, program }) => (
-    <div className="student-card">
+const StudentCard = ({ name, matric, program, onClick }) => (
+    <div className="student-card" onClick={onClick}>
         <div className="student-info">
             <div className="student-avatar-placeholder">
                 {name.charAt(0)}
@@ -41,7 +43,46 @@ const StudentCard = ({ name, matric, program }) => (
     </div>
 );
 
+const StatusTag = ({ status }) => {
+    let className = 'tag tag-status ';
+    if (status === 'Completed') className += 'tag-success';
+    else if (status === 'In Progress') className += 'tag-warning';
+
+    return <span className={className}>{status}</span>;
+}
+
+const CategoryTag = ({ category }) => {
+    const colors = {
+        'Academic': 'tag-blue',
+        'Career': 'tag-purple',
+        'Registration': 'tag-orange',
+        'Personal': 'tag-teal'
+    };
+    return <span className={`tag ${colors[category] || 'tag-gray'}`}>{category}</span>;
+}
+
+const AdvisingRecordCard = ({ title, date, category, status }) => (
+    <div className="advising-card">
+        <div className="advising-card-content">
+            <div className="advising-main">
+                <h4 className="advising-title">{title}</h4>
+                <div className="advising-meta">
+                    <span className="advising-date">{date}</span>
+                </div>
+                <div className="advising-tags">
+                    <CategoryTag category={category} />
+                    <StatusTag status={status} />
+                </div>
+            </div>
+            <ChevronRight className="card-arrow" />
+        </div>
+    </div>
+);
+
 function App() {
+    const [currentView, setCurrentView] = useState('list'); // 'list' or 'detail'
+    const [selectedStudent, setSelectedStudent] = useState(null);
+
     const students = [
         { name: 'Ali Bin Abu', matric: 'A12345678', program: 'Bachelor of Computer Science' },
         { name: 'Siti Aminah', matric: 'A23456789', program: 'Bachelor of Information Systems' },
@@ -50,6 +91,24 @@ function App() {
         { name: 'Muhammad Haris', matric: 'A56789012', program: 'Bachelor of Computer Science' },
         { name: 'Fatimah Zahra', matric: 'A67890123', program: 'Bachelor of Artificial Intelligence' },
     ];
+
+    const advisingHistory = [
+        { title: 'Course Selection Discussion – Semester 2', date: 'January 3, 2026', category: 'Academic', status: 'Completed' },
+        { title: 'Academic Performance Review', date: 'December 15, 2025', category: 'Academic', status: 'Completed' },
+        { title: 'Career Path Planning', date: 'November 28, 2025', category: 'Career', status: 'In Progress' },
+        { title: 'Registration Issues – Missing Prerequisites', date: 'November 10, 2025', category: 'Registration', status: 'Completed' },
+        { title: 'Personal Development Check-in', date: 'October 22, 2025', category: 'Personal', status: 'Completed' },
+    ];
+
+    const handleStudentClick = (student) => {
+        setSelectedStudent(student);
+        setCurrentView('detail');
+    };
+
+    const handleBackClick = () => {
+        setCurrentView('list');
+        setSelectedStudent(null);
+    };
 
     return (
         <div className="dashboard-layout">
@@ -104,29 +163,60 @@ function App() {
 
                 {/* Main Content Area */}
                 <main className="content-area">
-                    <div className="content-header">
-                        <h1>Student List</h1>
-                        <p>Select a student to view advising notes and recommendations</p>
-                    </div>
+                    {currentView === 'list' ? (
+                        <>
+                            <div className="content-header">
+                                <h1>Student List</h1>
+                                <p>Select a student to view advising notes and recommendations</p>
+                            </div>
 
-                    <div className="search-section">
-                        <div className="search-bar">
-                            <Search className="search-icon" size={20} />
-                            <input type="text" placeholder="Search student by name or matric number" />
+                            <div className="search-section">
+                                <div className="search-bar">
+                                    <Search className="search-icon" size={20} />
+                                    <input type="text" placeholder="Search student by name or matric number" />
+                                </div>
+                            </div>
+
+                            <div className="student-list">
+                                {students.map((student, index) => (
+                                    <StudentCard key={index} {...student} onClick={() => handleStudentClick(student)} />
+                                ))}
+                            </div>
+                        </>
+                    ) : (
+                        <div className="details-view">
+                            <button className="back-button" onClick={handleBackClick}>
+                                <ArrowLeft size={20} /> Back to Student List
+                            </button>
+
+                            <div className="content-header small-margin">
+                                <h1>Advising Notes</h1>
+                            </div>
+
+                            <div className="student-info-banner">
+                                <div className="banner-details">
+                                    <h2 className="banner-name">{selectedStudent.name}</h2>
+                                    <p className="banner-sub">{selectedStudent.matric} • {selectedStudent.program}</p>
+                                </div>
+                                <button className="btn-primary">
+                                    <Plus size={18} /> Add Advising Note
+                                </button>
+                            </div>
+
+                            <div className="history-section">
+                                <h3>Advising History</h3>
+                                <div className="history-list">
+                                    {advisingHistory.map((record, index) => (
+                                        <AdvisingRecordCard key={index} {...record} />
+                                    ))}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-
-                    <div className="student-list">
-                        {students.map((student, index) => (
-                            <StudentCard key={index} {...student} />
-                        ))}
-                    </div>
+                    )}
                 </main>
             </div>
         </div>
     );
 }
-
-
 
 export default App;

@@ -9,23 +9,7 @@
 </head>
 
 <body>
-  <div id="root">
-    <div style="font-family: sans-serif; padding: 20px;">
-      <h2>Loading Advising App...</h2>
-      <p>If this message doesn't disappear, there is an error.</p>
-      <p>Please check if you ran <code>npm install</code> in this folder.</p>
-    </div>
-  </div>
-  <script>
-    window.onerror = function (message, source, lineno, colno, error) {
-      var root = document.getElementById('root');
-      root.innerHTML += '<div style="color: red; background: #ffe6e6; padding: 10px; border: 1px solid red; margin-top: 20px;">' +
-        '<h3>Error Detected:</h3>' +
-        '<p>' + message + '</p>' +
-        '<p>Source: ' + source + ':' + lineno + '</p>' +
-        '</div>';
-    };
-  </script>
+  <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
 </body>
 
