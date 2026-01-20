@@ -18,7 +18,9 @@ import {
     Calendar,
     FileText,
     ArrowLeft,
-    Plus
+    Plus,
+    Save,
+    X
 } from 'lucide-react';
 
 const SidebarItem = ({ icon: Icon, label, active = false }) => (
@@ -80,7 +82,7 @@ const AdvisingRecordCard = ({ title, date, category, status }) => (
 );
 
 function App() {
-    const [currentView, setCurrentView] = useState('list'); // 'list' or 'detail'
+    const [currentView, setCurrentView] = useState('list'); // 'list', 'detail', 'add-note'
     const [selectedStudent, setSelectedStudent] = useState(null);
 
     const students = [
@@ -108,6 +110,21 @@ function App() {
     const handleBackClick = () => {
         setCurrentView('list');
         setSelectedStudent(null);
+    };
+
+    const handleAddNoteClick = () => {
+        setCurrentView('add-note');
+    };
+
+    const handleCancelAdd = () => {
+        setCurrentView('detail');
+    };
+
+    const handleSaveNote = (e) => {
+        e.preventDefault();
+        // In a real app, this would save data.
+        // For UI demo, we just go back to the list.
+        setCurrentView('detail');
     };
 
     return (
@@ -163,7 +180,7 @@ function App() {
 
                 {/* Main Content Area */}
                 <main className="content-area">
-                    {currentView === 'list' ? (
+                    {currentView === 'list' && (
                         <>
                             <div className="content-header">
                                 <h1>Student List</h1>
@@ -183,7 +200,9 @@ function App() {
                                 ))}
                             </div>
                         </>
-                    ) : (
+                    )}
+
+                    {currentView === 'detail' && (
                         <div className="details-view">
                             <button className="back-button" onClick={handleBackClick}>
                                 <ArrowLeft size={20} /> Back to Student List
@@ -198,7 +217,7 @@ function App() {
                                     <h2 className="banner-name">{selectedStudent.name}</h2>
                                     <p className="banner-sub">{selectedStudent.matric} • {selectedStudent.program}</p>
                                 </div>
-                                <button className="btn-primary">
+                                <button className="btn-primary" onClick={handleAddNoteClick}>
                                     <Plus size={18} /> Add Advising Note
                                 </button>
                             </div>
@@ -211,6 +230,101 @@ function App() {
                                     ))}
                                 </div>
                             </div>
+                        </div>
+                    )}
+
+                    {currentView === 'add-note' && (
+                        <div className="add-note-view">
+                            <button className="back-button" onClick={handleCancelAdd}>
+                                <ArrowLeft size={20} /> Back to Advising History
+                            </button>
+
+                            <div className="content-header small-margin">
+                                <h1>Add Advising Note</h1>
+                            </div>
+
+                            {/* Read-only Student Card */}
+                            <div className="student-info-card-readonly">
+                                <div className="info-row">
+                                    <span className="label">Student Name:</span>
+                                    <span className="value">{selectedStudent.name}</span>
+                                </div>
+                                <div className="info-row">
+                                    <span className="label">Matric Number:</span>
+                                    <span className="value">{selectedStudent.matric}</span>
+                                </div>
+                                <div className="info-row">
+                                    <span className="label">Programme:</span>
+                                    <span className="value">{selectedStudent.program}</span>
+                                </div>
+                            </div>
+
+                            <form className="advising-form" onSubmit={handleSaveNote}>
+                                <div className="form-grid">
+                                    <div className="form-group">
+                                        <label>Advising Date <span className="required">*</span></label>
+                                        <input type="date" required className="form-input" />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label>Note Title <span className="required">*</span></label>
+                                        <input type="text" placeholder="Enter note title" required className="form-input" />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label>Category <span className="required">*</span></label>
+                                        <select required className="form-select">
+                                            <option value="">Select Category</option>
+                                            <option value="Academic">Academic</option>
+                                            <option value="Personal">Personal</option>
+                                            <option value="Career">Career</option>
+                                            <option value="Registration">Registration</option>
+                                        </select>
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label>Visibility <span className="required">*</span></label>
+                                        <select required className="form-select">
+                                            <option value="Private">Private (Advisor Only)</option>
+                                            <option value="Public">Public (Student Visible)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="form-group full-width">
+                                    <label>Advising Notes</label>
+                                    <textarea placeholder="Enter detailed advising notes..." className="form-textarea" rows="6"></textarea>
+                                </div>
+
+                                <div className="form-group full-width">
+                                    <label>Recommendations</label>
+                                    <textarea placeholder="Enter recommendations and suggested actions..." className="form-textarea" rows="4"></textarea>
+                                </div>
+
+                                <div className="form-grid">
+                                    <div className="form-group">
+                                        <label>Follow-up Date</label>
+                                        <input type="date" className="form-input" />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label>Status <span className="required">*</span></label>
+                                        <select required className="form-select">
+                                            <option value="In Progress">In Progress</option>
+                                            <option value="Completed">Completed</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="form-actions">
+                                    <button type="button" className="btn-secondary" onClick={handleCancelAdd}>
+                                        Cancel
+                                    </button>
+                                    <button type="submit" className="btn-primary">
+                                        <Save size={18} /> Save Advising Note
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     )}
                 </main>
