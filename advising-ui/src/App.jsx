@@ -15,7 +15,8 @@ import {
     AlertTriangle,
     BookOpen,
     BarChart2,
-    Calendar
+    Calendar,
+    FileText
 } from 'lucide-react';
 
 const SidebarItem = ({ icon: Icon, label, active = false }) => (
@@ -126,7 +127,6 @@ function App() {
     );
 }
 
-// Helper icon component since 'FileText' was undefined in import list (fixed below)
-import { FileText } from 'lucide-react';
+
 
 export default App;
