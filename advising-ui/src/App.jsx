@@ -83,8 +83,9 @@ const AdvisingRecordCard = ({ title, date, category, status, onClick, active }) 
 );
 
 function App() {
-    const [currentView, setCurrentView] = useState('list'); // 'list', 'detail', 'add-note'
+    const [currentView, setCurrentView] = useState('list'); // 'list', 'detail', 'add-note', 'note-detail'
     const [selectedStudent, setSelectedStudent] = useState(null);
+    const [selectedRecord, setSelectedRecord] = useState(null);
 
     const students = [
         { name: 'Ali Bin Abu', matric: 'A12345678', program: 'Bachelor of Computer Science' },
@@ -96,21 +97,32 @@ function App() {
     ];
 
     const advisingHistory = [
-        { title: 'Course Selection Discussion – Semester 2', date: 'January 3, 2026', category: 'Academic', status: 'Completed' },
-        { title: 'Academic Performance Review', date: 'December 15, 2025', category: 'Academic', status: 'Completed' },
-        { title: 'Career Path Planning', date: 'November 28, 2025', category: 'Career', status: 'In Progress' },
-        { title: 'Registration Issues – Missing Prerequisites', date: 'November 10, 2025', category: 'Registration', status: 'Completed' },
-        { title: 'Personal Development Check-in', date: 'October 22, 2025', category: 'Personal', status: 'Completed' },
+        { id: 1, title: 'Course Selection Discussion – Semester 2', date: 'January 3, 2026', category: 'Academic', status: 'Completed', visibility: 'Private' },
+        { id: 2, title: 'Academic Performance Review', date: 'December 15, 2025', category: 'Academic', status: 'Completed', visibility: 'Private' },
+        { id: 3, title: 'Career Path Planning', date: 'November 28, 2025', category: 'Career', status: 'In Progress', visibility: 'Public' },
+        { id: 4, title: 'Registration Issues – Missing Prerequisites', date: 'November 10, 2025', category: 'Registration', status: 'Completed', visibility: 'Private' },
+        { id: 5, title: 'Personal Development Check-in', date: 'October 22, 2025', category: 'Personal', status: 'Completed', visibility: 'Private' },
     ];
 
     const handleStudentClick = (student) => {
         setSelectedStudent(student);
         setCurrentView('detail');
+        setSelectedRecord(null);
+    };
+
+    const handleRecordClick = (record) => {
+        setSelectedRecord(record);
+        setCurrentView('note-detail');
     };
 
     const handleBackClick = () => {
-        setCurrentView('list');
-        setSelectedStudent(null);
+        if (currentView === 'note-detail') {
+            setCurrentView('detail');
+            setSelectedRecord(null);
+        } else {
+            setCurrentView('list');
+            setSelectedStudent(null);
+        }
     };
 
     const handleAddNoteClick = () => {
@@ -227,7 +239,11 @@ function App() {
                                 <h3>Advising History</h3>
                                 <div className="history-list">
                                     {advisingHistory.map((record, index) => (
-                                        <AdvisingRecordCard key={index} {...record} />
+                                        <AdvisingRecordCard
+                                            key={index}
+                                            {...record}
+                                            onClick={() => handleRecordClick(record)}
+                                        />
                                     ))}
                                 </div>
                             </div>
@@ -326,6 +342,107 @@ function App() {
                                     </button>
                                 </div>
                             </form>
+                        </div>
+                    )}
+                    {currentView === 'note-detail' && selectedRecord && (
+                        <div className="split-view-container">
+                            {/* Left Column: History */}
+                            <div className="split-left-col">
+                                <h3>Advising History</h3>
+                                <div className="history-list-compact">
+                                    {advisingHistory.map((record, index) => (
+                                        <AdvisingRecordCard
+                                            key={index}
+                                            {...record}
+                                            active={record.id === selectedRecord.id}
+                                            onClick={() => setSelectedRecord(record)}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Right Column: Details */}
+                            <div className="split-right-col">
+                                <button className="back-button" onClick={() => setCurrentView('detail')}>
+                                    <ArrowLeft size={20} /> Back to Advising History
+                                </button>
+
+                                <div className="content-header small-margin">
+                                    <h1>Advising Note Details</h1>
+                                </div>
+
+                                {/* Student Info Card */}
+                                <div className="student-info-card-readonly">
+                                    <div className="info-row">
+                                        <span className="label">Student Name:</span>
+                                        <span className="value">{selectedStudent.name}</span>
+                                    </div>
+                                    <div className="info-row">
+                                        <span className="label">Matric Number:</span>
+                                        <span className="value">{selectedStudent.matric}</span>
+                                    </div>
+                                    <div className="info-row">
+                                        <span className="label">Programme:</span>
+                                        <span className="value">{selectedStudent.program}</span>
+                                    </div>
+                                </div>
+
+                                {/* Session Summary */}
+                                <div className="detail-section">
+                                    <div className="detail-header-row">
+                                        <h2 className="detail-title">{selectedRecord.title}</h2>
+                                        <div className="detail-tags">
+                                            <span className="tag tag-gray">{selectedRecord.visibility || 'Private'}</span>
+                                            <CategoryTag category={selectedRecord.category} />
+                                            <StatusTag status={selectedRecord.status} />
+                                        </div>
+                                    </div>
+                                    <p className="detail-date">{selectedRecord.date}</p>
+                                </div>
+
+                                {/* Notes Section */}
+                                <div className="detail-block">
+                                    <h3 className="detail-block-title">Advising Notes</h3>
+                                    <p className="detail-text">
+                                        Discussed course selections for the upcoming semester. Student expressed interest in
+                                        Advanced Database Systems and Machine Learning courses. Reviewed prerequisites and
+                                        confirmed eligibility. Student is performing well academically with a current CGPA of 3.45.
+                                    </p>
+                                </div>
+
+                                {/* Recommendations Section */}
+                                <div className="detail-block">
+                                    <h3 className="detail-block-title">Recommendations</h3>
+                                    <ol className="recommendation-list">
+                                        <li>Enroll in CSC3401 Advanced Database Systems</li>
+                                        <li>Take CSC3501 Machine Learning Fundamentals</li>
+                                        <li>Consider joining the AI/ML student club for practical experience</li>
+                                        <li>Maintain current study habits to keep CGPA above 3.4</li>
+                                    </ol>
+                                </div>
+
+                                {/* Follow-up Info */}
+                                <div className="detail-block">
+                                    <h3 className="detail-block-title">Follow-up Information</h3>
+                                    <div className="info-row">
+                                        <span className="label">Follow-up Date:</span>
+                                        <span className="value">February 15, 2026</span>
+                                    </div>
+                                    <div className="info-row">
+                                        <span className="label">Visibility:</span>
+                                        <span className="value">Private</span>
+                                    </div>
+                                </div>
+
+                                <div className="form-actions">
+                                    <button type="button" className="btn-secondary" onClick={() => setCurrentView('detail')}>
+                                        Back
+                                    </button>
+                                    <button type="button" className="btn-primary">
+                                        <Edit size={18} /> Edit Advising Note
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     )}
                 </main>
