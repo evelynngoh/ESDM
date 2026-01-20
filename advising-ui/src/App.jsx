@@ -20,7 +20,8 @@ import {
     ArrowLeft,
     Plus,
     Save,
-    X
+    X,
+    Edit
 } from 'lucide-react';
 
 const SidebarItem = ({ icon: Icon, label, active = false }) => (
@@ -63,8 +64,8 @@ const CategoryTag = ({ category }) => {
     return <span className={`tag ${colors[category] || 'tag-gray'}`}>{category}</span>;
 }
 
-const AdvisingRecordCard = ({ title, date, category, status }) => (
-    <div className="advising-card">
+const AdvisingRecordCard = ({ title, date, category, status, onClick, active }) => (
+    <div className={`advising-card ${active ? 'active' : ''}`} onClick={onClick}>
         <div className="advising-card-content">
             <div className="advising-main">
                 <h4 className="advising-title">{title}</h4>
@@ -76,7 +77,7 @@ const AdvisingRecordCard = ({ title, date, category, status }) => (
                     <StatusTag status={status} />
                 </div>
             </div>
-            <ChevronRight className="card-arrow" />
+            <ChevronRight className={`card-arrow ${active ? 'active-arrow' : ''}`} />
         </div>
     </div>
 );
