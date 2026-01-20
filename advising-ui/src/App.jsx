@@ -65,10 +65,7 @@ const CategoryTag = ({ category }) => {
 }
 
 const AdvisingRecordCard = ({ title, date, category, status, onClick, active }) => (
-    <div className={`advising-card ${active ? 'active' : ''}`} onClick={(e) => {
-        console.log('Card div clicked');
-        if (onClick) onClick(e);
-    }}>
+    <div className={`advising-card ${active ? 'active' : ''}`} onClick={onClick}>
         <div className="advising-card-content">
             <div className="advising-main">
                 <h4 className="advising-title">{title}</h4>
@@ -114,10 +111,8 @@ function App() {
     };
 
     const handleRecordClick = (record) => {
-        console.log('Record clicked:', record);
         setSelectedRecord(record);
         setCurrentView('note-detail');
-        console.log('View set to note-detail');
     };
 
     const handleBackClick = () => {
